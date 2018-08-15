@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="130dp" >
+    <ImageView
+        android:id="@+id/restaurant_img"
+        android:layout_width="160dp"
+        android:layout_height="90dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+    <TextView
+        android:id="@+id/title"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/restaurant_img"
+        android:layout_toRightOf="@+id/restaurant_img"
+        android:paddingTop="15dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_toRightOf="@+id/restaurant_img"
+        android:paddingLeft="10dp"
+        android:textColor="#ACACAC"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/desc"
+        android:layout_toRightOf="@+id/restaurant_img"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:textSize="14dp" />
+
+</RelativeLayout>
