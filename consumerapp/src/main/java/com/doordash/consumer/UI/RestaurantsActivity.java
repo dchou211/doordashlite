@@ -33,7 +33,7 @@ public class RestaurantsActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_restaurants);
 
-		retrieveData();
+		retrieveData(offset, PAGE_SIZE);
 	}
 
 	private void generateDataList(List<Restaurant> restaurantList) {
@@ -46,18 +46,18 @@ public class RestaurantsActivity extends AppCompatActivity {
 		adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
 			@Override
 			public void onLoadMore() {
-				offset += PAGE_SIZE;
-				retrieveData();
+				retrieveData(offset + PAGE_SIZE, PAGE_SIZE);
 			}
 		});
 
 		recyclerView.setAdapter(adapter);
 	}
 
-	private void retrieveData () {
-		ContextSingleton.getRestaurantAgent().getRestaurantsNearHQ(offset, PAGE_SIZE, new Callback<List<Restaurant>>() {
+	private void retrieveData (int tempOffset, int limit) {
+		ContextSingleton.getRestaurantAgent().getRestaurantsNearHQ(tempOffset, limit, new Callback<List<Restaurant>>() {
 			@Override
 			public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
+				offset += PAGE_SIZE;
 				if(response.body() == null) {
 					return;
 				}
@@ -78,7 +78,6 @@ public class RestaurantsActivity extends AppCompatActivity {
 
 				// Allow retry to happen
 				adapter.setLoaded();
-				offset -= PAGE_SIZE;
 			}
 		});
 	}
