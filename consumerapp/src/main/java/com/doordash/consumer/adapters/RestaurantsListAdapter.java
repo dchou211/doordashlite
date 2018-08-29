@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.doordash.consumer.ContextSingleton;
 import com.doordash.consumer.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashSet;
 import java.util.List;
 
 import Interfaces.OnLoadMoreListener;
@@ -61,7 +63,7 @@ public class RestaurantsListAdapter extends RecyclerView.Adapter<RestaurantsList
 		}
 	}
 
-	class RestaurantViewHolder extends RecyclerView.ViewHolder {
+	class RestaurantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		public final View mView;
 
@@ -69,6 +71,8 @@ public class RestaurantsListAdapter extends RecyclerView.Adapter<RestaurantsList
 		private TextView txtDescription;
 		private ImageView coverImage;
 		private TextView txtStatus;
+		private CheckBox favorited;
+		private Restaurant restaurant;
 
 		RestaurantViewHolder(View itemView) {
 			super(itemView);
@@ -78,6 +82,25 @@ public class RestaurantsListAdapter extends RecyclerView.Adapter<RestaurantsList
 			coverImage = (ImageView) mView.findViewById(R.id.restaurant_img);
 			txtDescription = (TextView) mView.findViewById(R.id.desc);
 			txtStatus = (TextView) mView.findViewById(R.id.status);
+			favorited = (CheckBox) mView.findViewById(R.id.favorited);
+			favorited.setOnClickListener(this);
+		}
+
+		@Override
+		public void onClick(View view) {
+			HashSet<Integer> favoriteRestaurants = ContextSingleton.getFavoriteRestaurants(context);
+
+			// favorite/unfavorite restaurant
+			if (!favorited.isChecked()) {
+				if (favoriteRestaurants.contains(restaurant.getId())) {
+					favoriteRestaurants.remove(restaurant.getId());
+				}
+			} else {
+				if (!favoriteRestaurants.contains(restaurant.getId())) {
+					favoriteRestaurants.add(restaurant.getId());
+				}
+			}
+			ContextSingleton.updateFavorites(context);
 		}
 	}
 
@@ -95,6 +118,14 @@ public class RestaurantsListAdapter extends RecyclerView.Adapter<RestaurantsList
 		holder.txtTitle.setText(restaurant.getName());
 		holder.txtDescription.setText(restaurant.getDescription());
 		holder.txtStatus.setText(restaurant.getStatus());
+		holder.restaurant = restaurant;
+
+		HashSet<Integer> favoriteRestaurants = ContextSingleton.getFavoriteRestaurants(context);
+		if (favoriteRestaurants.contains(restaurant.getId())) {
+			holder.favorited.setChecked(true);
+		} else {
+			holder.favorited.setChecked(false);
+		}
 
 		Picasso picasso = ContextSingleton.getPicassoInstance(context);
 		picasso.load(dataList.get(position).getImgUrl()).into(holder.coverImage);
